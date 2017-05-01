@@ -27,7 +27,8 @@ class ParticleFilter {
 	// Number of particles to draw
 	int num_particles; 
 	
-	
+	// Maximum weight for the current set of particles
+  double max_weight;
 	
 	// Flag, if filter is initialized
 	bool is_initialized;
