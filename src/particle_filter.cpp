@@ -34,8 +34,9 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
     particles[i].y = dist_y(gen);
     particles[i].theta = dist_theta(gen);
     particles[i].id = 0; // No initial information for this parameter
-    particles[i].weight = 1.0f;
-    
+    //particles[i].weight = 1.0f; redundant with member weights
+    weights[i] = 1.0f;
+	  
     // Visualization for debugging - print all particles
     //std::cout << "P[" << i << "]:\tx: " << particles[i].x << "\t y: " << particles[i].y << "\t theta: " << particles[i].theta << "\n";
   }
@@ -55,7 +56,7 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
   
   // From lesson 12.3
   // Apply bicycle motion model
-  if(fabs(yaw_rate)>0.001) {
+  if(fabs(yaw_rate) > 0.001) {
     // Use calculus to update position
     for(int i = 0; i < num_particles; ++i) {
       particles[i].x += (velocity/yaw_rate)*(sin(particles[i].theta + yaw_rate*delta_t) - sin(particles[i].theta));
@@ -83,10 +84,10 @@ void ParticleFilter::prediction(double delta_t, double std_pos[], double velocit
   }
 }
 
-void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations) {
+/*void ParticleFilter::dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations) {
 	// Unused
 
-}
+}*/
 
 void ParticleFilter::updateWeights(double sensor_range, double std_landmark[], 
 		std::vector<LandmarkObs> observations, Map map_landmarks) {
@@ -157,16 +158,21 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
       std::cout << "Particle #" << p_idx << ",\tObs #" << o_idx << ",\tWeight " << obs_weights[o_idx] << "\n";
     }
     // Still inside FOR loop on particle p_idx, update the total particle weight
-    particles[p_idx].weight = 1.0f;
+    //particles[p_idx].weight = 1.0f;
+    weights[p_idx] = 1.0f;
     for (int i = 0; i < num_observations; ++i) {
-      particles[p_idx].weight *= obs_weights[i];
+      //particles[p_idx].weight *= obs_weights[i];
+      weights[p_idx] *= obs_weights[i];
     }
-    weights[p_idx] = particles[p_idx].weight;
-    if (particles[p_idx].weight > max_weight) {
-      max_weight = particles[p_idx].weight;
+    //weights[p_idx] = particles[p_idx].weight;
+    //if (particles[p_idx].weight > max_weight) {
+    if (weights[p_idx] > max_weight) {
+      //max_weight = particles[p_idx].weight;
+      max_weight = weights[p_idx];
     }
     // Visualization for debugging - print particle weights
-    std::cout << "Particle #" << p_idx << ": " << particles[p_idx].weight << "\n";
+    //std::cout << "Particle #" << p_idx << ": " << particles[p_idx].weight << "\n";
+    //std::cout << "Particle #" << p_idx << ": " << weights[p_idx] << "\n";
     
   }
   
@@ -174,48 +180,23 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
 }
 
 void ParticleFilter::resample() {
-	// TODO: Resample particles with replacement with probability proportional to their weight. 
-	// NOTE: You may find std::discrete_distribution helpful here.
-	//   http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
   
   // From http://en.cppreference.com/w/cpp/numeric/random/discrete_distribution
-  /*std::random_device rd;
-  std::mt19937 gen(rd());
-  std::discrete_distribution<> d({40, 10, 10, 40});
-  std::map<int, int> m;
-  for(int n=0; n<10000; ++n) {
-    ++m[d(gen)];
-  }*/
   
   std::vector<Particle> resampled_particles;
-  
-  
   std::random_device rd;
   std::mt19937 gen(rd());
   std::discrete_distribution<> d(weights.begin(), weights.end());
+	
   for(int n=0; n<num_particles; ++n) {
     resampled_particles.push_back(particles[d(gen)]);
   }
   
   particles = resampled_particles;
   
-  // From lesson 13.20
-  /*
-  int p_idx = int(rand() * double(num_particles));
-  double beta = 0.0f;
-  
-  std::vector<Particle> resampled_particles;
-  for (int i = 0; i < num_particles; ++i) {
-    beta += rand() * 2 * max_weight;
-    while (beta > particles[i].weight) {
-      beta -= particles[i].weight;
-      ++p_idx;
-      if (p_idx >= num_particles) {
-        p_idx = 0;
-      }
-      std::cout << ".";
-    }
-  }*/
+  /* Resample wheel algorithm from lesson 13.20 seems to get stuch in while loop
+     weights may be too small 1e-100, 1e-300 for this algorithm
+     */
 
 }
 
