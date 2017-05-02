@@ -34,7 +34,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
     particles[i].y = dist_y(gen);
     particles[i].theta = dist_theta(gen);
     particles[i].id = 0; // No initial information for this parameter
-    //particles[i].weight = 1.0f; redundant with member weights
+    particles[i].weight = 1.0f; // Redundant with member "weights"
     weights[i] = 1.0f;
 	  
     // Visualization for debugging - print all particles
@@ -155,19 +155,16 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
       obs_weights[o_idx] = (1/(2*M_PI*sig_x*sig_y))*exp(-(min_dist_x*min_dist_x)/(2*sig_x*sig_x) - (min_dist_y*min_dist_y)/(2*sig_y*sig_y));
       
       // Visualization for debugging - print intermediate weights
-      std::cout << "Particle #" << p_idx << ",\tObs #" << o_idx << ",\tWeight " << obs_weights[o_idx] << "\n";
+      //std::cout << "Particle #" << p_idx << ",\tObs #" << o_idx << ",\tWeight " << obs_weights[o_idx] << "\n";
     }
     // Still inside FOR loop on particle p_idx, update the total particle weight
-    //particles[p_idx].weight = 1.0f;
     weights[p_idx] = 1.0f;
     for (int i = 0; i < num_observations; ++i) {
       //particles[p_idx].weight *= obs_weights[i];
       weights[p_idx] *= obs_weights[i];
     }
-    //weights[p_idx] = particles[p_idx].weight;
-    //if (particles[p_idx].weight > max_weight) {
+    particles[p_idx].weight = weights[p_idx];
     if (weights[p_idx] > max_weight) {
-      //max_weight = particles[p_idx].weight;
       max_weight = weights[p_idx];
     }
     // Visualization for debugging - print particle weights

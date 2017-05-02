@@ -17,7 +17,7 @@ struct Particle {
 	double x;
 	double y;
 	double theta;
-	//double weight; this is redundant with member "weights"
+	double weight; //this is redundant with member "weights", but used in main.cpp
 };
 
 
@@ -28,7 +28,7 @@ class ParticleFilter {
 	int num_particles; 
 	
 	// Maximum weight for the current set of particles
-        double max_weight;
+  double max_weight;
 	
 	// Flag, if filter is initialized
 	bool is_initialized;
