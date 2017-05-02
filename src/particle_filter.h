@@ -76,7 +76,8 @@ public:
 	 * @param predicted Vector of predicted landmark observations
 	 * @param observations Vector of landmark observations
 	 */
-	void dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations);
+	//void dataAssociation(std::vector<LandmarkObs> predicted, std::vector<LandmarkObs>& observations);
+	// unused method; data association is done within updateWeights() method
 	
 	/**
 	 * updateWeights Updates the weights for each particle based on the likelihood of the 
