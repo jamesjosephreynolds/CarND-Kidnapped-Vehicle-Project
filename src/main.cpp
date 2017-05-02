@@ -71,6 +71,15 @@ int main() {
 		return -1;
 	}
 	
+  // Write out ground truth data for post-processing only
+  /* Write to a file in order to post process in Matlab
+  std::ofstream outFile("gt.m", std::ofstream::out);
+  for(int i = 0; i < gt.size(); ++i) {
+      outFile << "G{" << i+1 << "} = [" << gt[i].x << ", " << gt[i].y << "];\n\n";
+  }
+  outFile.close();
+   */
+  
 	// Run particle filter!
 	int num_time_steps = position_meas.size();
 	ParticleFilter pf;

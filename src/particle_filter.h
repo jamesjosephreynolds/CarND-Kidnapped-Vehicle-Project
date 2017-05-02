@@ -25,7 +25,10 @@ struct Particle {
 class ParticleFilter {
 	
 	// Number of particles to draw
-	int num_particles; 
+	int num_particles;
+  
+  // Current step for post-processing visualization
+  int pf_step;
 	
 	// Maximum weight for the current set of particles
   double max_weight;

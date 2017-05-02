@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <iostream>
 #include <numeric>
+#include <fstream>
 
 #include "particle_filter.h"
 
@@ -29,6 +30,9 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
   std::normal_distribution<double> dist_theta(theta, std[2]);
   
   // Initialize each particle based on noisy measurement data
+  /* Write to a file in order to post process in Matlab
+  std::ofstream outFile("p.m", std::ofstream::out);
+   */
   for(int i = 0; i < num_particles; ++i) {
     particles[i].x = dist_x(gen);
     particles[i].y = dist_y(gen);
@@ -36,11 +40,23 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
     particles[i].id = 0; // No initial information for this parameter
     particles[i].weight = 1.0f; // Redundant with member "weights"
     weights[i] = 1.0f;
+    pf_step = 0; // used for keeping track of iteration for post-processing only
 	  
     // Visualization for debugging - print all particles
-    //std::cout << "P[" << i << "]:\tx: " << particles[i].x << "\t y: " << particles[i].y << "\t theta: " << particles[i].theta << "\n";
+    /* Write to a file in order to post process in Matlab
+    if (i == 0){
+      outFile << "P{" << pf_step+1 << "} = [" << particles[i].x << ", " << particles[i].y << ", " << particles[i].theta << ";...\n";
+    } else if (i == (num_particles - 1)) {
+      outFile << particles[i].x << ", " << particles[i].y << ", " << particles[i].theta << "];\n\n";
+    } else {
+      outFile << particles[i].x << ", " << particles[i].y << ", " << particles[i].theta << ";...\n";
+    }
+     */
+    
   }
-  
+  /* Write to a file in order to post process in Matlab
+  outFile.close();
+   */
   is_initialized = true;
 }
 
@@ -190,6 +206,21 @@ void ParticleFilter::resample() {
   }
   
   particles = resampled_particles;
+  pf_step += 1;
+  /* Write to a file in order to post process in Matlab
+  std::ofstream outFile("p.m", std::ofstream::app);
+  for (int i = 0; i < num_particles; ++i) {
+    // Visualization for debugging - print all particles
+    if (i == 0){
+      outFile << "P{" << pf_step+1 << "} = [" << particles[i].x << ", " << particles[i].y << ", " << particles[i].theta << ";...\n";
+    } else if (i == (num_particles - 1)) {
+      outFile << particles[i].x << ", " << particles[i].y << ", " << particles[i].theta << "];\n\n";
+    } else {
+      outFile << particles[i].x << ", " << particles[i].y << ", " << particles[i].theta << ";...\n";
+    }
+  }
+  outFile.close();
+   */
   
   /* Resample wheel algorithm from lesson 13.20 seems to get stuch in while loop
      weights may be too small 1e-100, 1e-300 for this algorithm
