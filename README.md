@@ -2,6 +2,9 @@
 This project is originally forked from https://github.com/udacity/CarND-Kidnapped-vehicle-Project. This repository includes starter code, that is used herein.
 
 ## Particle Filter Initialization
+The strategy for the initial population of particles is to use the first GPS measurement (`x, y, theta` coordinates), and to randomly choose points around that measurement.  The selection is based on generating a random offset, based on a Gaussian probability distribution.
+
+Additionally, with no observation information available initially, the particle weights are all set equal to `1.0`.
 
 ```C++
 
