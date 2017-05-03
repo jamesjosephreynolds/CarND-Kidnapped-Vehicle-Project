@@ -3,7 +3,7 @@ This project is originally forked from https://github.com/udacity/CarND-Kidnappe
 
 ## Particle Filter Initialization
 
-```cpp
+```C++
 
 void ParticleFilter::init(double x, double y, double theta, double std[]) {
   // Visualization for debugging - print initial point
