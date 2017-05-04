@@ -30,9 +30,6 @@ class ParticleFilter {
   // Current step for post-processing visualization
   int pf_step;
 	
-	// Maximum weight for the current set of particles
-  double max_weight;
-	
 	// Flag, if filter is initialized
 	bool is_initialized;
 	
