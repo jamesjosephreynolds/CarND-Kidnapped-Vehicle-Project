@@ -126,7 +126,7 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
   double obs_x, obs_y, dist_x, dist_y, dist, min_dist_x, min_dist_y, min_dist;
   max_weight = 0.0f;
   
-  // Assign and observation to a landmark
+  // Assign an observation to a landmark
   for(int p_idx = 0; p_idx < num_particles; ++p_idx ){
     // Perform the update for each particle
     // Use temp variables for readability
@@ -166,13 +166,13 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
           //std::cout << "D: " << dist << "\n";
         }
       }
-      // Still inside FOR loop on observation o_idx, update the weight of a single observation
+      // At the end of FOR loop for a given observation, update the weight of that observation
       obs_weights[o_idx] = (1/(2*M_PI*sig_x*sig_y))*exp(-(min_dist_x*min_dist_x)/(2*sig_x*sig_x) - (min_dist_y*min_dist_y)/(2*sig_y*sig_y));
       
       // Visualization for debugging - print intermediate weights
       //std::cout << "Particle #" << p_idx << ",\tObs #" << o_idx << ",\tWeight " << obs_weights[o_idx] << "\n";
     }
-    // Still inside FOR loop on particle p_idx, update the total particle weight
+    // At the end of FOR loop on for a given particle, update the total weight of that particle
     weights[p_idx] = 1.0f;
     for (int i = 0; i < num_observations; ++i) {
       //particles[p_idx].weight *= obs_weights[i];
