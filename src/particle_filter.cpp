@@ -124,7 +124,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
   //std::cout << "Number of observations: " << num_observations << "\n\n";
   
   double obs_x, obs_y, dist_x, dist_y, dist, min_dist_x, min_dist_y, min_dist;
-  max_weight = 0.0f;
   
   // Assign an observation to a landmark
   for(int p_idx = 0; p_idx < num_particles; ++p_idx ){
@@ -179,9 +178,6 @@ void ParticleFilter::updateWeights(double sensor_range, double std_landmark[],
       weights[p_idx] *= obs_weights[i];
     }
     particles[p_idx].weight = weights[p_idx];
-    if (weights[p_idx] > max_weight) {
-      max_weight = weights[p_idx];
-    }
     // Visualization for debugging - print particle weights
     //std::cout << "Particle #" << p_idx << ": " << particles[p_idx].weight << "\n";
     //std::cout << "Particle #" << p_idx << ": " << weights[p_idx] << "\n";
