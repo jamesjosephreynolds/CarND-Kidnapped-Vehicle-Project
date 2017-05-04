@@ -42,7 +42,6 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
     weights[i] = 1.0f;
     pf_step = 0; // used for keeping track of iteration for post-processing only
 	  
-    // Visualization for debugging - print all particles
     /* Write to a file in order to post process in Matlab
     if (i == 0){
       outFile << "P{" << pf_step+1 << "} = [" << particles[i].x << ", " << particles[i].y << ", " << particles[i].theta << ";...\n";
