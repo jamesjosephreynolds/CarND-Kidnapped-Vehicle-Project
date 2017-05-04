@@ -40,7 +40,7 @@ void ParticleFilter::init(double x, double y, double theta, double std[]) {
     particles[i].id = 0; // No initial information for this parameter
     particles[i].weight = 1.0f; // Redundant with member "weights"
     weights[i] = 1.0f;
-    pf_step = 0; // used for keeping track of iteration for post-processing only
+    //pf_step = 0; // used for keeping track of iteration for post-processing only
 	  
     /* Write to a file in order to post process in Matlab
     if (i == 0){
@@ -205,7 +205,7 @@ void ParticleFilter::resample() {
   }
   
   particles = resampled_particles;
-  pf_step += 1;
+  //pf_step += 1;
   /* Write to a file in order to post process in Matlab
   std::ofstream outFile("p.m", std::ofstream::app);
   for (int i = 0; i < num_particles; ++i) {
